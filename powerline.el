@@ -93,7 +93,8 @@ static char * arrow_%s[] = {
            "\n"
            (mapconcat (lambda (d) (,rowfunc d width)) (number-sequence dots 0 -1) "\n")
            "};")
-          'xpm t :ascent 'center)))))
+          'xpm t :ascent 'center
+          :face (when (and face1 face2) (if (eq ',dir 'left) face1 face2)))))))
 
 (defun powerline-reset ()
   "Reset memoized functions."
@@ -336,13 +337,14 @@ static char * %s[] = {
                                            (eq (pl/minibuffer-selected-window) (selected-window)))))
                           (face1 (if active 'powerline-active1 'powerline-inactive1))
                           (face2 (if active 'powerline-active2 'powerline-inactive2))
+                          (mode-line (if active 'mode-line 'mode-line-inactive))
                           (lhs (list
-                                (powerline-raw "%*" nil 'l)
-                                (powerline-buffer-size nil 'l)
-                                (powerline-buffer-id nil 'l)
+                                (powerline-raw "%*" mode-line 'l)
+                                (powerline-buffer-size mode-line 'l)
+                                (powerline-buffer-id mode-line 'l)
 
-                                (powerline-raw " ")
-                                (powerline-arrow-right nil face1)
+                                (powerline-raw " " mode-line)
+                                (powerline-arrow-right mode-line face1)
 
                                 (powerline-raw mode-line-process face1 'l)
 
@@ -356,9 +358,9 @@ static char * %s[] = {
                                 (powerline-raw ":" face1)
                                 (powerline-raw "%3c" face1 'r)
 
-                                (powerline-arrow-left face1 nil)
+                                (powerline-arrow-left face1 mode-line)
                                 (powerline-raw " ")
-                                (powerline-raw "%6p" nil 'r)
+                                (powerline-raw "%6p" mode-line 'r)
                                 (powerline-hud face2 face1)))
                           (center (list
                                    (powerline-raw " " face1)
@@ -391,13 +393,14 @@ static char * %s[] = {
                                            (eq (pl/minibuffer-selected-window) (selected-window)))))
                           (face1 (if active 'powerline-active1 'powerline-inactive1))
                           (face2 (if active 'powerline-active2 'powerline-inactive2))
+                          (mode-line (if active 'mode-line 'mode-line-inactive))
                           (lhs (list
-                                (powerline-raw "%*" nil 'l)
-                                (powerline-buffer-size nil 'l)
-                                (powerline-buffer-id nil 'l)
+                                (powerline-raw "%*" mode-line 'l)
+                                (powerline-buffer-size mode-line 'l)
+                                (powerline-buffer-id mode-line 'l)
 
-                                (powerline-raw " ")
-                                (powerline-arrow-right nil face1)
+                                (powerline-raw " " mode-line)
+                                (powerline-arrow-right mode-line face1)
 
                                 (when (boundp 'erc-modified-channels-object)
                                   (powerline-raw erc-modified-channels-object
@@ -421,10 +424,10 @@ static char * %s[] = {
                                 (powerline-raw ":" face1)
                                 (powerline-raw "%3c" face1 'r)
 
-                                (powerline-arrow-left face1 nil)
-                                (powerline-raw " ")
+                                (powerline-arrow-left face1 mode-line)
+                                (powerline-raw " " mode-line)
 
-                                (powerline-raw "%6p" nil 'r)
+                                (powerline-raw "%6p" mode-line 'r)
 
                                 (powerline-hud face2 face1))))
                      (concat
@@ -437,6 +440,7 @@ static char * %s[] = {
   (cond
    ((and (listp item) (eq 'image (car item))) (propertize " " 'display item))
    (item item)))
+
 
 (defun powerline-render (values)
   (mapconcat 'pl/render values ""))
